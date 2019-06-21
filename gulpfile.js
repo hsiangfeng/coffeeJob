@@ -1,6 +1,7 @@
 const gulp = require('gulp');
 const sourcemaps = require('gulp-sourcemaps');
 const coffee = require('gulp-coffee');
+const browserSync = require('browser-sync').create();
 
 gulp.task(('HTML'), () => {
   return gulp.src('./src/**/*.html')
@@ -30,10 +31,18 @@ gulp.task('coffee', () => {
   .pipe(gulp.dest('./bulid/'));
 })
 
-gulp.task('watch', () => {
+gulp.task('browser-sync', function() {
+  browserSync.init({
+      server: {
+          baseDir: "./bulid" // 要注意這裡應該要指向到要模擬的伺服器資料夾，也就是 public
+      }
+  });
+});
+
+gulp.task('watch', gulp.parallel('browser-sync', () =>{
   gulp.watch('./src/**/*.html', gulp.series('HTML'));
-  gulp.watch('./src/css/**/*.scss',  gulp.series('CSS'));
+  gulp.watch('./src/css/**/*.css',  gulp.series('CSS'));
   gulp.watch('./src/js/**/*.coffee', gulp.series('coffee'));
-})
+}));
 
 gulp.task('default',gulp.series('HTML', 'CSS', 'img', 'coffee','watch'));

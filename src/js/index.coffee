@@ -6,7 +6,7 @@ scrollTopID = document.getElementById 'scroll-top'
 profileUserData = ''
 
 getProfile = ->
-  profileUrl = 'https://raw.githubusercontent.com/hexschool/test-profile/master/profile.json'
+  profileUrl = 'https://raw.githubusercontent.com/hexschool/Resume/develop/profile.json'
   fetch profileUrl
     .then (respons) ->
       return respons.json()

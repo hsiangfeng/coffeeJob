@@ -12,7 +12,7 @@ profileUserData = '';
 
 getProfile = function() {
   var profileUrl;
-  profileUrl = 'https://raw.githubusercontent.com/hexschool/test-profile/master/profile.json';
+  profileUrl = 'https://raw.githubusercontent.com/hexschool/Resume/develop/profile.json';
   return fetch(profileUrl).then(function(respons) {
     return respons.json();
   }).then(function(profileData) {

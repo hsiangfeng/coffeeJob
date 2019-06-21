@@ -181,4 +181,4 @@ areaID.addEventListener 'change', (e) ->
     filterProfile profileUserData, e.target.value
 
 
-scrollTopID.addEventListener 'click', scrollTopClick(e)
+scrollTopID.addEventListener 'click', scrollTopClick

@@ -1,6 +1,7 @@
 const gulp = require('gulp');
 const sourcemaps = require('gulp-sourcemaps');
 const coffee = require('gulp-coffee');
+const ghPages = require('gulp-gh-pages');
 const browserSync = require('browser-sync').create();
 
 gulp.task(('HTML'), () => {
@@ -20,7 +21,7 @@ gulp.task('img', () => {
 
 gulp.task('deploy', () => {
   return gulp.src('./bulid/**/*')
-    .pipe($.ghPages());
+    .pipe(ghPages());
 });
 
 gulp.task('coffee', () => {

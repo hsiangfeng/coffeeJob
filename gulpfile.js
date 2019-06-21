@@ -27,7 +27,7 @@ gulp.task('coffee', () => {
   return gulp.src('./src/**/*.coffee')
   .pipe(sourcemaps.init())
   .pipe(coffee({bare: true}))
-  .pipe(sourcemaps.write())
+  .pipe(sourcemaps.write('.'))
   .pipe(gulp.dest('./bulid/'));
 })
 

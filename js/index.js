@@ -78,7 +78,7 @@ updateProfile = function(profileData) {
 filterProfile = function(profile, area) {
   var str;
   str = '';
-  str += `<div class='col-md-12'> <h3> <i class='fas fa-map-marker-alt text-primary'></i> 他們希望在 <span class='text-primary'>${area}</span> 工作 </h3> </div>`;
+  str += `<div class='col-md-12'> <h3> <i class='fas fa-map-marker-alt text-primary'></i> 他們希望在 <span class='text-primary'>${area}</span> 工作 </h3> <hr/> </div>`;
   profile.forEach(function(profileItem) {
     return profileItem.location.forEach(function(item) {
       if (item === area) {

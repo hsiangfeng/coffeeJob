@@ -104,6 +104,7 @@ filterProfile = (profile, area) ->
       <i class='fas fa-map-marker-alt text-primary'></i>
       他們希望在 <span class='text-primary'>#{area}</span> 工作
     </h3>
+    <hr/>
   </div>"
   profile.forEach (profileItem) ->
     profileItem.location.forEach (item) ->

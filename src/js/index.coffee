@@ -20,26 +20,27 @@ getProfile = ->
 optionArea = (data) ->
   newArea = filterArea(data)
   newArea.forEach (item) ->
-    options = document.createElement('option');
-    options.textContent = item;
+    options = document.createElement('option')
+    options.textContent = item
     area.appendChild options
 
 filterArea = (data) ->
-  profile = data;
-  cache = [];
-  newArea = [];
+  profile = data
+  cache = []
+  newArea = []
 
-  for i in profile
-    cache = cache.concat i.location
+  profile.forEach (item) ->
+    cache = cache.concat item.location
 
   newArea = cache.filter (item, index) ->
     cache.indexOf(item) == index
 
   return newArea;
+
 updateProfile = (profileData) ->
-  profile = profileData;
-  str = '';
-  newArea = filterArea profile;
+  profile = profileData
+  str = ''
+  newArea = filterArea profile
   newArea.forEach (area) ->
     str += "
     <div class='col-md-12'>
@@ -48,10 +49,10 @@ updateProfile = (profileData) ->
         他們希望在 <span class='text-primary'>#{area}</span> 工作
       </h3>
       <hr/>
-    </div>";
-    profile.forEach (item) -> 
+    </div>"
+    profile.forEach (item) ->
       a = item.location.some (val) ->
-        val == area;
+        val == area
       if (a) 
         str += "
           <div class='col-md-6 my-2'>
@@ -67,12 +68,7 @@ updateProfile = (profileData) ->
                           "<span>#{itemType}</span>"
                         .join(' / ')}
                     </div>
-                    #{
-                      if item.experience != 0
-                        "<div class='text-muted'>工作經歷 #{item.experience} 年</div>"
-                      else
-                        ''
-                      }
+                    #{ if item.experience != 0 then "<div class='text-muted'>工作經歷 #{item.experience} 年</div>" else ''}
                   </div>
                 </div>
                 <div class='col-lg-7 d-flex flex-column align-self-stretch'>
@@ -98,7 +94,7 @@ updateProfile = (profileData) ->
             </div>
           </div>
         </div>"
-  app.innerHTML = str;
+  app.innerHTML = str
 
 filterProfile = (profile, area) ->
   str = ''
@@ -111,7 +107,7 @@ filterProfile = (profile, area) ->
   </div>"
   profile.forEach (profileItem) ->
     profileItem.location.forEach (item) ->
-      if (item == area) 
+      if (item == area)
         str += "
         <div class='col-md-6 my-2'>
           <div class='card h-100'>
@@ -126,11 +122,7 @@ filterProfile = (profile, area) ->
                         "<span>#{itemType}</span>"
                       .join(' / ')}
                     </div>
-                    #{
-                      if profileItem.experience != 0
-                        "<div class='text-muted'>工作經歷 #{profileItem.experience} 年</div>"
-                      else
-                        ''
+                    #{if profileItem.experience != 0 then "<div class='text-muted'>工作經歷 #{profileItem.experience} 年</div>" else ''
                     }
                   </div>
                 </div>
@@ -157,12 +149,12 @@ filterProfile = (profile, area) ->
             </div>
           </div>
         </div>"
-  app.innerHTML = str;
+  app.innerHTML = str
 
 scrollTopClick = (e) ->
   e.preventDefault()
   window.scrollTo
-    top: 0, 
+    top: 0,
     behavior: "smooth"
 
 getProfile()
@@ -174,11 +166,9 @@ window.addEventListener 'scroll', () ->
     scrollTopID.style.opacity = '0'
 
 areaID.addEventListener 'change', (e) ->
-  console.log(e.target.value)
   if e.target.value == '全部'
     updateProfile profileUserData
   else
     filterProfile profileUserData, e.target.value
-
 
 scrollTopID.addEventListener 'click', scrollTopClick

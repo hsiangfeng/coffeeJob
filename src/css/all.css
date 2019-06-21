@@ -1,0 +1,54 @@
+body {
+  position: relative;
+}
+.banner {
+  background-image: url(../img/cytonn-photography-604681-unsplash.jpg);
+  background-position: center;
+  background-size: cover;
+  height: 400px;
+  padding: 30px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ffffff;
+  position: relative;
+  margin-bottom: 30px;
+}
+
+.banner::before {
+  content: '';
+  background-color: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.profile-user-img {
+  width: 150px;
+  height: 150px;
+  background-position: center;
+  background-size: cover;
+  border-radius: 50%;
+}
+.profile-user-img-mobile {
+  width: 100px;
+  height: 100px;
+  background-position: center;
+  background-size: cover;
+  border-radius: 50%;
+}
+
+.profile-description {
+  font-size: 14px;
+  padding: 10px 0;
+}
+
+#scroll-top {
+  position: fixed;
+  right: 25px;
+  bottom: 25px;
+  transition: all 0.5s;
+  opacity: 0;
+}

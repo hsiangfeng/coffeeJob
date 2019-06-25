@@ -47,8 +47,12 @@ body {
 
 #scroll-top {
   position: fixed;
-  right: 25px;
-  bottom: 25px;
+  right: 7px;
+  bottom: 90px;
   transition: all 0.5s;
   opacity: 0;
+}
+.fixed-bottom {
+  position: fixed;
+  bottom: 0px;
 }

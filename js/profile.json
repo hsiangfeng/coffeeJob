@@ -1,0 +1,68 @@
+[
+  {
+    "imgUrl": "https://i.imgur.com/5PTiocN.png",
+    "name": "王緯宸",
+    "tags": ["Vue.js", "JavaScript", "SCSS", "Git"],
+    "job": ["前端工程師"],
+    "location": ["台北", "新北", "台中"],
+    "type": ["全職"],
+    "experience": 0,
+    "description": "努力學習、成長，朝著軟體工程師為目標前進！",
+    "profileUrl": ""
+  },
+  {
+    "imgUrl":"https://images.cakeresume.com/innie902/1b0378a1-f45b-4c50-9d8e-d14169bacc96.png",
+    "name":"楊瑋柔",
+    "tags":["Vue.js", "jQuery", "RWD", "Git"],
+    "job":["前端工程師"],
+    "location": ["台北", "新北"],
+    "type":["全職"],
+    "experience": 0,
+    "description": "具備團隊溝通能力，有和後端工程師配合開發的經驗，喜歡互相分享技術經驗或新知。相信魔鬼藏在細節裡，透過學習及練習不斷精進自己的 code 。近期正在學習 Vue.js 。",
+    "profileUrl": ""
+  },
+  {
+    "imgUrl":"https://i.imgur.com/A3tYIQM.jpg",
+    "name":"黃英鳴",
+    "tags":["JavaScript", "Vue.js", "Git", "RWD"],
+    "job":["前端工程師"],
+    "location": ["台中"],
+    "type": ["全職"],
+    "experience": 0,
+    "description": "曾在 Monospace 共同工作空間參與團隊開發。",
+    "profileUrl": "https://www.cakeresume.com/d748f5"
+  },
+  {
+    "imgUrl":"https://i.imgur.com/YF71p36.jpg",
+    "name":"黃子榮",
+    "tags":["Vue.js", "JavaScript", "RWD", "Git"],
+    "job":["前端工程師"],
+    "location": ["台北", "新北"],
+    "type": ["全職"],
+    "experience": 0,
+    "description": "樂於學習新事物並與他人分享討論，有研究精神，會用零碎時間補強專業觀念及相關知識。",
+    "profileUrl": "https://www.cakeresume.com/s--Ry2Wqp7OZ98Cm-khnN1-vA--/haung-long"
+  },
+  {
+    "imgUrl": "https://res.cloudinary.com/cakeresume/image/upload/s--HcFTeMF9--/c_fill,fl_png8,g_face,h_300,w_300/v1512478065/shirhu22mwlly19kmw65.png",
+    "name": "廖柏錩",
+    "tags": ["React", "RWD", "Git", "Docker"],
+    "job": ["前端工程師"],
+    "location": ["台中"],
+    "type": ["全職"],
+    "experience": 3,
+    "description": "喜歡學習新技術，樂於分享與討論",
+    "profileUrl": "https://www.cakeresume.com/s--uiw3jipfnG7xhECXSVjPIw--/richardliao"
+  },
+  {
+    "imgUrl": "https://images.cakeresume.com/ruien-yuski/c67ee53c-4b2e-4ff2-be5a-8dfb77b431bb.png",
+    "name": "張瑞恩",
+    "tags": ["JavaScript","Vue.js", "RWD", "Git"],
+    "job": ["前端工程師"],
+    "location": ["高雄"],
+    "type": ["全職"],
+    "experience": 0,
+    "description": "投入前端，樂於分享。透過網路平台交流前端技術，並期望能投入前端行列。",
+    "profileUrl": "https://www.cakeresume.com/s--9oMHLDEfE-EvUlLGm6VKvA--/ruien-yuski"
+  }
+]

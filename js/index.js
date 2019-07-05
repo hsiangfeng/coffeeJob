@@ -10,7 +10,7 @@ profileUserData = '';
 
 getProfile = function() {
   var profileUrl;
-  profileUrl = 'https://raw.githubusercontent.com/hexschool/Resume/develop/profile.json';
+  profileUrl = 'https://raw.githubusercontent.com/hexschool/Resume/master/profile.json';
   return fetch(profileUrl).then(function(respons) {
     return respons.json();
   }).then(function(profileData) {
@@ -92,7 +92,7 @@ profileCard = function(item) {
     return `<span>${itemLocation}</span>`;
   }).join(' / ')} </div> <div class='text-left'>${item.job}</div> <p class='card-text profile-description text-muted'>${item.description}</p> <div class='profile-tags small text-muted mt-auto'> ${item.tags.map(function(itemTages) {
     return `<span class='d-inline-block'>${itemTages}</span>`;
-  }).join(' / ')} </div> <div class='profile-connect'> <a href='${item.profileUrl}' class='btn btn-outline-success btn-block mt-2'>網羅人才</a> </div> </div> </div> </div> </div> </div>`;
+  }).join(' / ')} </div> <div class='profile-connect'> ${(item.profileUrl ? `<a href='${item.profileUrl}' class='btn btn-outline-success btn-block mt-2'>網羅人才</a>` : "<a href='#' class='btn btn-outline-success btn-block mt-2 disabled' tabindex='-1' role='button' aria-disabled='true'><i class='fab fa-angellist'></i> 成功媒合！</a>")} </div> </div> </div> </div> </div> </div>`;
 };
 
 scrollTopClick = function(e) {

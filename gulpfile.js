@@ -46,4 +46,4 @@ gulp.task('watch', gulp.parallel('browser-sync', () =>{
   gulp.watch('./src/js/**/*.coffee', gulp.series('coffee'));
 }));
 
-gulp.task('default',gulp.series('HTML', 'CSS', 'img', 'coffee','watch'));
+gulp.task('default',gulp.series('HTML', 'CSS', 'img', 'coffee','copyJSON','watch'));

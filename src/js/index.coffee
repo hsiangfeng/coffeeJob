@@ -5,7 +5,7 @@ scrollTopID = document.getElementById 'scroll-top'
 profileUserData = ''
 
 getProfile = ->
-  profileUrl = 'https://raw.githubusercontent.com/hexschool/Resume/develop/profile.json'
+  profileUrl = 'https://raw.githubusercontent.com/hexschool/Resume/master/profile.json'
   fetch profileUrl
     .then (respons) ->
       return respons.json()
@@ -104,7 +104,9 @@ profileCard = (item) ->
               .join(' / ')}
           </div>
           <div class='profile-connect'>
-            <a href='#{item.profileUrl}' class='btn btn-outline-success btn-block mt-2'>網羅人才</a>
+            #{
+              if item.profileUrl then "<a href='#{item.profileUrl}' class='btn btn-outline-success btn-block mt-2'>網羅人才</a>" else "<a href='#' class='btn btn-outline-success btn-block mt-2 disabled' tabindex='-1' role='button' aria-disabled='true'><i class='fab fa-angellist'></i> 成功媒合！</a>"
+            }
           </div>
         </div>
       </div>

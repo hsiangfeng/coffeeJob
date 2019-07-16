@@ -8,7 +8,7 @@
     "type": ["全職"],
     "experience": 0,
     "description": "努力學習、成長，朝著軟體工程師為目標前進！",
-    "profileUrl": ""
+    "profileUrl": "https://www.cakeresume.com/s--lTJN8Ds5RSiFWRRpszvYwg--/most5303"
   },
   {
     "imgUrl":"https://images.cakeresume.com/innie902/1b0378a1-f45b-4c50-9d8e-d14169bacc96.png",
@@ -41,7 +41,7 @@
     "type": ["全職"],
     "experience": 0,
     "description": "樂於學習新事物並與他人分享討論，有研究精神，會用零碎時間補強專業觀念及相關知識。",
-    "profileUrl": "https://www.cakeresume.com/s--Ry2Wqp7OZ98Cm-khnN1-vA--/haung-long"
+    "profileUrl": ""
   },
   {
     "imgUrl": "https://res.cloudinary.com/cakeresume/image/upload/s--HcFTeMF9--/c_fill,fl_png8,g_face,h_300,w_300/v1512478065/shirhu22mwlly19kmw65.png",
@@ -64,5 +64,16 @@
     "experience": 0,
     "description": "投入前端，樂於分享。透過網路平台交流前端技術，並期望能投入前端行列。",
     "profileUrl": "https://www.cakeresume.com/s--9oMHLDEfE-EvUlLGm6VKvA--/ruien-yuski"
+  },
+  {
+    "imgUrl": "https://i.imgur.com/jktz9mz.png",
+    "name": "楊弘駿",
+    "tags": ["Vue.js", "JavaScript", "SASS", "Git"],
+    "job": ["前端工程師"],
+    "location": ["台北", "新北", "高雄"],
+    "type": ["全職"],
+    "experience": 0,
+    "description": "樂於研究、分享技術，對於 Web 有著極大的興趣及熱情，將成為全端工程師為目標邁進!",
+    "profileUrl": "https://www.cakeresume.com/s--ZtZSfKnFFlS41__MapP33A--/see2460357-f85527"
   }
 ]

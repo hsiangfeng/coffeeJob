@@ -46,8 +46,13 @@ updateProfile = (profileData) ->
     str += hopeArea(area)
     profile.forEach (item) ->
       a = item.location.some (val) ->
+        return val == area
+      if (a && item.profileUrl)
+        return str += profileCard(item)
+    profile.forEach (item) ->
+      a = item.location.some (val) ->
         val == area
-      if (a) 
+      if (a && !item.profileUrl)
         str += profileCard(item)
   app.innerHTML = str
 
@@ -57,7 +62,11 @@ filterProfile = (profile, area) ->
   
   profile.forEach (profileItem) ->
     profileItem.location.forEach (item) ->
-      if (item == area)
+      if (item == area && profileItem.profileUrl)
+        str += profileCard(profileItem)
+  profile.forEach (profileItem) ->
+    profileItem.location.forEach (item) ->
+      if (item == area && !profileItem.profileUrl)
         str += profileCard(profileItem)
   app.innerHTML = str
 

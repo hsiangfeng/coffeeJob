@@ -24,6 +24,11 @@ gulp.task('deploy', () => {
     .pipe(ghPages());
 });
 
+gulp.task('copyJSON', () => {
+  return gulp.src('./src/**/*.json')
+  .pipe(gulp.dest('./bulid'));
+})
+
 gulp.task('coffee', () => {
   return gulp.src('./src/**/*.coffee')
   .pipe(sourcemaps.init())
@@ -44,6 +49,7 @@ gulp.task('watch', gulp.parallel('browser-sync', () =>{
   gulp.watch('./src/**/*.html', gulp.series('HTML'));
   gulp.watch('./src/css/**/*.css',  gulp.series('CSS'));
   gulp.watch('./src/js/**/*.coffee', gulp.series('coffee'));
+  gulp.watch('./src/js/**/*.json', gulp.series('copyJSON'));
 }));
 
 gulp.task('default',gulp.series('HTML', 'CSS', 'img', 'coffee','copyJSON','watch'));

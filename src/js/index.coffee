@@ -2,6 +2,7 @@ app = document.getElementById 'app'
 areaID = document.getElementById 'area'
 workID = document.getElementById 'work'
 scrollTopID = document.getElementById 'scroll-top'
+hasWorkCount = 300
 
 profileUserData = ''
 
@@ -78,7 +79,7 @@ filterProfile = (profile, area) ->
 
 
 getWorkPeple = (data) ->
-  workID.innerHTML = "有 #{300 + data.length} 位學員透過六角成功就業囉"
+  workID.innerHTML = "有 #{hasWorkCount + data.length} 位學員透過六角成功就業囉"
 
 hopeArea = (area) ->
   "<div class='col-md-12'>

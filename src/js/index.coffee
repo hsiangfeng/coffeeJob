@@ -78,7 +78,7 @@ filterProfile = (profile, area) ->
 
 
 getWorkPeple = (data) ->
-  workID.innerHTML = "已經有 #{data.length} 位學員透過人才牆成功媒合囉~！"
+  workID.innerHTML = "有 #{300 + data.length} 位學員透過六角成功就業囉"
 
 hopeArea = (area) ->
   "<div class='col-md-12'>

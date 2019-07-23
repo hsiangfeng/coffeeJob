@@ -1,4 +1,4 @@
-var app, areaID, filterArea, filterProfile, getProfile, getWorkPeple, hopeArea, optionArea, profileCard, profileUserData, scrollTopClick, scrollTopID, updateProfile, workID;
+var app, areaID, filterArea, filterProfile, getProfile, getWorkPeple, hasWorkCount, hopeArea, optionArea, profileCard, profileUserData, scrollTopClick, scrollTopID, updateProfile, workID;
 
 app = document.getElementById('app');
 
@@ -8,12 +8,14 @@ workID = document.getElementById('work');
 
 scrollTopID = document.getElementById('scroll-top');
 
+hasWorkCount = 300;
+
 profileUserData = '';
 
 getProfile = function() {
   var profileUrl, workUrl;
   profileUrl = 'https://raw.githubusercontent.com/hexschool/Resume/master/profile.json';
-  workUrl = 'https://raw.githubusercontent.com/hsiangfeng/Resume-1/develop/thework.json';
+  workUrl = 'https://raw.githubusercontent.com/hexschool/Resume/master/findJob.json';
   $.getJSON(profileUrl).done(function(result) {
     profileUserData = result;
   }).then(function(result) {
@@ -103,7 +105,7 @@ filterProfile = function(profile, area) {
 };
 
 getWorkPeple = function(data) {
-  return workID.innerHTML = `已經有 ${data.length} 位學員透過人才牆成功媒合囉~！`;
+  return workID.innerHTML = `有 ${hasWorkCount + data.length} 位學員透過六角成功就業囉`;
 };
 
 hopeArea = function(area) {

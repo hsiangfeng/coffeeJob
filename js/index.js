@@ -1,22 +1,27 @@
-var app, areaID, filterArea, filterProfile, getProfile, hopeArea, optionArea, profileCard, profileUserData, scrollTopClick, scrollTopID, updateProfile;
+var app, areaID, filterArea, filterProfile, getProfile, getWorkPeple, hopeArea, optionArea, profileCard, profileUserData, scrollTopClick, scrollTopID, updateProfile, workID;
 
 app = document.getElementById('app');
 
 areaID = document.getElementById('area');
+
+workID = document.getElementById('work');
 
 scrollTopID = document.getElementById('scroll-top');
 
 profileUserData = '';
 
 getProfile = function() {
-  var profileUrl;
+  var profileUrl, workUrl;
   profileUrl = 'https://raw.githubusercontent.com/hexschool/Resume/master/profile.json';
-  return fetch(profileUrl).then(function(respons) {
-    return respons.json();
-  }).then(function(profileData) {
-    profileUserData = profileData;
-    updateProfile(profileUserData);
-    optionArea(profileUserData);
+  workUrl = 'https://raw.githubusercontent.com/hsiangfeng/Resume-1/develop/thework.json';
+  $.getJSON(profileUrl).done(function(result) {
+    profileUserData = result;
+  }).then(function(result) {
+    return $.getJSON(workUrl).done(function(work) {
+      updateProfile(profileUserData);
+      optionArea(profileUserData);
+      getWorkPeple(work);
+    });
   }).catch(function(error) {
     console.log(error);
   });
@@ -95,6 +100,10 @@ filterProfile = function(profile, area) {
     });
   });
   return app.innerHTML = str;
+};
+
+getWorkPeple = function(data) {
+  return workID.innerHTML = `已經有 ${data.length} 位學員透過人才牆成功媒合囉~！`;
 };
 
 hopeArea = function(area) {

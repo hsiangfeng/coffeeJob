@@ -1,22 +1,28 @@
 app = document.getElementById 'app'
 areaID = document.getElementById 'area'
+workID = document.getElementById 'work'
 scrollTopID = document.getElementById 'scroll-top'
 
 profileUserData = ''
 
 getProfile = ->
   profileUrl = 'https://raw.githubusercontent.com/hexschool/Resume/master/profile.json'
-  fetch profileUrl
-    .then (respons) ->
-      return respons.json()
-    .then (profileData) ->
-      profileUserData = profileData
-      updateProfile(profileUserData)
-      optionArea(profileUserData)
-      return
-    .catch (error)->
+  workUrl = 'https://raw.githubusercontent.com/hexschool/Resume/master/findJob.json'
+  $.getJSON profileUrl
+    .done (result) ->
+      profileUserData = result
+      return 
+    .then (result) ->
+      $.getJSON workUrl
+        .done (work) ->
+          updateProfile(profileUserData)
+          optionArea(profileUserData)
+          getWorkPeple(work)
+          return
+    .catch (error) ->
       console.log error
       return
+  return
 
 optionArea = (data) ->
   newArea = filterArea(data)
@@ -70,6 +76,9 @@ filterProfile = (profile, area) ->
         str += profileCard(profileItem)
   app.innerHTML = str
 
+
+getWorkPeple = (data) ->
+  workID.innerHTML = "已經有 #{data.length} 位學員透過人才牆成功媒合囉~！"
 
 hopeArea = (area) ->
   "<div class='col-md-12'>

@@ -2,26 +2,49 @@ app = document.getElementById 'app'
 areaID = document.getElementById 'area'
 workID = document.getElementById 'work'
 scrollTopID = document.getElementById 'scroll-top'
-hasWorkCount = 300
 
+hasWorkCount = 300
+zone = ''
+job = ''
 profileUserData = ''
+workLen = ''
+
+getUrlQueryString = ->
+  url = window.location.href
+  if url.indexOf('?') != -1
+    queryArr1 = url.split('?')[1].split('&')
+    queryArr1.forEach (item,index) ->
+      if item.split('=')[0] == 'area'
+        zone = decodeURI item.split('=')[1]
+        return
+      else if item.split('=')[0] == 'job'
+        job = decodeURI item.split('=')[1]
+        return
+  return
 
 getProfile = ->
   profileUrl = 'https://raw.githubusercontent.com/hexschool/Resume/master/profile.json'
   workUrl = 'https://raw.githubusercontent.com/hexschool/Resume/master/findJob.json'
-  $.getJSON profileUrl
-    .done (result) ->
-      profileUserData = result
-      return 
-    .then (result) ->
-      $.getJSON workUrl
-        .done (work) ->
-          updateProfile(profileUserData)
-          optionArea(profileUserData)
-          getWorkPeple(work)
-          return
+
+  getWorkAjax = ->
+    return $.getJSON(workUrl)
+  getProfileAJAX = ->
+    return $.getJSON(profileUrl)
+
+  $.when(getWorkAjax(), getProfileAJAX())
+    .done (workResult1, profileResult2) ->
+      profileUserData = profileResult2[0]
+      optionArea(profileResult2[0])
+      getWorkPeple(workResult1[0])
+
+      if zone
+        filterProfile(profileResult2[0], zone)
+        return
+      else
+        updateProfile(profileResult2[0])
+        return
     .catch (error) ->
-      console.log error
+      console.log error.responseText
       return
   return
 
@@ -30,7 +53,7 @@ optionArea = (data) ->
   newArea.forEach (item) ->
     options = document.createElement('option')
     options.textContent = item
-    area.appendChild options
+    area.appendChild(options)
 
 filterArea = (data) ->
   profile = data
@@ -38,7 +61,7 @@ filterArea = (data) ->
   newArea = []
 
   profile.forEach (item) ->
-    cache = cache.concat item.location
+    cache = cache.concat(item.location)
 
   newArea = cache.filter (item, index) ->
     cache.indexOf(item) == index
@@ -48,18 +71,18 @@ filterArea = (data) ->
 updateProfile = (profileData) ->
   profile = profileData
   str = ''
-  newArea = filterArea profile
+  newArea = filterArea(profile)
   newArea.forEach (area) ->
     str += hopeArea(area)
     profile.forEach (item) ->
       a = item.location.some (val) ->
         return val == area
-      if (a && item.profileUrl)
+      if a && item.profileUrl
         return str += profileCard(item)
     profile.forEach (item) ->
       a = item.location.some (val) ->
         val == area
-      if (a && !item.profileUrl)
+      if a && !item.profileUrl
         str += profileCard(item)
   app.innerHTML = str
 
@@ -69,11 +92,11 @@ filterProfile = (profile, area) ->
   
   profile.forEach (profileItem) ->
     profileItem.location.forEach (item) ->
-      if (item == area && profileItem.profileUrl)
+      if item == area && profileItem.profileUrl
         str += profileCard(profileItem)
   profile.forEach (profileItem) ->
     profileItem.location.forEach (item) ->
-      if (item == area && !profileItem.profileUrl)
+      if item == area && !profileItem.profileUrl
         str += profileCard(profileItem)
   app.innerHTML = str
 
@@ -140,9 +163,11 @@ scrollTopClick = (e) ->
     top: 0,
     behavior: "smooth"
 
+
+getUrlQueryString()
 getProfile()
 
-window.addEventListener 'scroll', () ->
+window.addEventListener 'scroll',() ->
   if window.scrollY > 100
     scrollTopID.style.opacity = '1'
   else
@@ -150,8 +175,8 @@ window.addEventListener 'scroll', () ->
 
 areaID.addEventListener 'change', (e) ->
   if e.target.value == '全部'
-    updateProfile profileUserData
+    updateProfile(profileUserData)
   else
-    filterProfile profileUserData, e.target.value
+    filterProfile(profileUserData, e.target.value)
 
 scrollTopID.addEventListener 'click', scrollTopClick

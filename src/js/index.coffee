@@ -83,24 +83,6 @@ filterArea = (data) ->
 
   return newArea;
 
-# updateProfile = (profileData) ->
-#   profile = profileData
-#   str = ''
-#   newArea = filterArea(profile)
-#   newArea.forEach (area) ->
-#     str += hopeArea(area)
-#     profile.forEach (item) ->
-#       a = item.location.some (val) ->
-#         return val == area
-#       if a && item.profileUrl
-#         return str += profileCard(item)
-#     profile.forEach (item) ->
-#       a = item.location.some (val) ->
-#         val == area
-#       if a && !item.profileUrl
-#         str += profileCard(item)
-#   app.innerHTML = str
-
 updateProfile = (profileData, area, job) ->
   str = ''
   console.log resume

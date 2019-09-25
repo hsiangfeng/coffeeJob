@@ -32,8 +32,7 @@ getUrlQueryString = ->
   return
 
 getProfile = ->
-  # profileUrl = 'https://raw.githubusercontent.com/hexschool/Resume/master/profile.json'
-  profileUrl = './js/profile.json'
+  profileUrl = 'https://raw.githubusercontent.com/hexschool/Resume/master/profile.json'
   workUrl = 'https://raw.githubusercontent.com/hexschool/Resume/master/findJob.json'
 
   getWorkAjax = ->

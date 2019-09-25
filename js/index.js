@@ -1,4 +1,4 @@
-var app, areaID, filterArea, filterProfile, getProfile, getWorkPeple, hasWorkCount, hopeArea, optionArea, profileCard, profileUserData, scrollTopClick, scrollTopID, updateProfile, workID;
+var app, areaID, filterArea, getProfile, getUrlQueryString, getWorkPeple, hopeArea, optionArea, profileCard, resume, scrollTopClick, scrollTopID, updateProfile, workID;
 
 app = document.getElementById('app');
 
@@ -8,36 +8,79 @@ workID = document.getElementById('work');
 
 scrollTopID = document.getElementById('scroll-top');
 
-hasWorkCount = 300;
+resume = {
+  hasWorkCount: 300,
+  zone: '',
+  job: '',
+  // 1 = 地區
+  // 2 = 職業
+  // 3 = 兩者皆有
+  status: '0',
+  profileUserData: []
+};
 
-profileUserData = '';
+getUrlQueryString = function() {
+  var queryArr1, url;
+  url = window.location.href;
+  if (url.indexOf('?') !== -1) {
+    queryArr1 = url.split('?')[1].split('&');
+    queryArr1.forEach(function(item, index) {
+      if (item.split('=')[0] === 'area') {
+        resume.zone = decodeURI(item.split('=')[1]);
+        resume.status = '1';
+      } else if (item.split('=')[0] === 'job') {
+        resume.job = decodeURI(item.split('=')[1]);
+        resume.status = '2';
+      }
+    });
+    if (resume.zone && resume.job) {
+      resume.status = '3';
+    }
+  }
+};
 
 getProfile = function() {
-  var profileUrl, workUrl;
+  var getProfileAJAX, getWorkAjax, profileUrl, workUrl;
   profileUrl = 'https://raw.githubusercontent.com/hexschool/Resume/master/profile.json';
   workUrl = 'https://raw.githubusercontent.com/hexschool/Resume/master/findJob.json';
-  $.getJSON(profileUrl).done(function(result) {
-    profileUserData = result;
-  }).then(function(result) {
-    return $.getJSON(workUrl).done(function(work) {
-      updateProfile(profileUserData);
-      optionArea(profileUserData);
-      getWorkPeple(work);
-    });
+  getWorkAjax = function() {
+    return $.getJSON(workUrl);
+  };
+  getProfileAJAX = function() {
+    return $.getJSON(profileUrl);
+  };
+  $.when(getWorkAjax(), getProfileAJAX()).done(function(workResult1, profileResult2) {
+    resume.profileUserData = profileResult2[0];
+    optionArea(profileResult2[0]);
+    getWorkPeple(workResult1[0]);
+    switch (resume.status) {
+      case '1':
+        return updateProfile(profileResult2[0], resume.zone);
+      case '2':
+        return updateProfile(profileResult2[0], null, resume.job);
+      case '3':
+        return updateProfile(profileResult2[0], resume.zone, resume.job);
+      default:
+        return updateProfile(profileResult2[0]);
+    }
   }).catch(function(error) {
-    console.log(error);
+    console.log(error.responseText);
   });
 };
 
 optionArea = function(data) {
   var newArea;
-  newArea = filterArea(data);
-  return newArea.forEach(function(item) {
-    var options;
-    options = document.createElement('option');
-    options.textContent = item;
-    return area.appendChild(options);
-  });
+  if (resume.status === '0') {
+    newArea = filterArea(data);
+    return newArea.forEach(function(item) {
+      var options;
+      options = document.createElement('option');
+      options.textContent = item;
+      return area.appendChild(options);
+    });
+  } else {
+    return areaID.remove();
+  }
 };
 
 filterArea = function(data) {
@@ -54,58 +97,98 @@ filterArea = function(data) {
   return newArea;
 };
 
-updateProfile = function(profileData) {
+updateProfile = function(profileData, area, job) {
   var newArea, profile, str;
+  str = '';
+  console.log(resume);
   profile = profileData;
-  str = '';
   newArea = filterArea(profile);
-  newArea.forEach(function(area) {
-    str += hopeArea(area);
-    profile.forEach(function(item) {
-      var a;
-      a = item.location.some(function(val) {
-        return val === area;
+  switch (resume.status) {
+    case '1':
+      str += hopeArea(area);
+      profile.forEach(function(profileItem) {
+        return profileItem.location.forEach(function(item) {
+          if (item === area && profileItem.profileUrl) {
+            return str += profileCard(profileItem);
+          }
+        });
       });
-      if (a && item.profileUrl) {
-        return str += profileCard(item);
-      }
-    });
-    return profile.forEach(function(item) {
-      var a;
-      a = item.location.some(function(val) {
-        return val === area;
+      profile.forEach(function(profileItem) {
+        return profileItem.location.forEach(function(item) {
+          if (item === area && !profileItem.profileUrl) {
+            return str += profileCard(profileItem);
+          }
+        });
       });
-      if (a && !item.profileUrl) {
-        return str += profileCard(item);
-      }
-    });
-  });
-  return app.innerHTML = str;
-};
-
-filterProfile = function(profile, area) {
-  var str;
-  str = '';
-  str += hopeArea(area);
-  profile.forEach(function(profileItem) {
-    return profileItem.location.forEach(function(item) {
-      if (item === area && profileItem.profileUrl) {
-        return str += profileCard(profileItem);
-      }
-    });
-  });
-  profile.forEach(function(profileItem) {
-    return profileItem.location.forEach(function(item) {
-      if (item === area && !profileItem.profileUrl) {
-        return str += profileCard(profileItem);
-      }
-    });
-  });
-  return app.innerHTML = str;
+      app.innerHTML = str;
+      break;
+    case '2':
+      profile.forEach(function(profileItem) {
+        return profileItem.job.forEach(function(itemJob) {
+          if (itemJob === job && profileItem.profileUrl) {
+            return str += profileCard(profileItem);
+          }
+        });
+      });
+      profile.forEach(function(profileItem) {
+        return profileItem.job.forEach(function(itemJob) {
+          if (itemJob === job && !profileItem.profileUrl) {
+            return str += profileCard(profileItem);
+          }
+        });
+      });
+      app.innerHTML = str;
+      break;
+    case '3':
+      str += hopeArea(area);
+      profile.forEach(function(profileItem) {
+        return profileItem.location.forEach(function(itemArea) {
+          return profileItem.job.forEach(function(itemJob) {
+            if (itemArea === area && itemJob === job && profileItem.profileUrl) {
+              return str += profileCard(profileItem);
+            }
+          });
+        });
+      });
+      profileData.forEach(function(profileItem) {
+        return profileItem.location.forEach(function(itemArea) {
+          return profileItem.job.forEach(function(itemJob) {
+            if (itemArea === area && itemJob === job && !profileItem.profileUrl) {
+              return str += profileCard(profileItem);
+            }
+          });
+        });
+      });
+      app.innerHTML = str;
+      break;
+    default:
+      newArea.forEach(function(area) {
+        str += hopeArea(area);
+        profile.forEach(function(item) {
+          var a;
+          a = item.location.some(function(val) {
+            return val === area;
+          });
+          if (a && item.profileUrl) {
+            return str += profileCard(item);
+          }
+        });
+        return profile.forEach(function(item) {
+          var a;
+          a = item.location.some(function(val) {
+            return val === area;
+          });
+          if (a && !item.profileUrl) {
+            return str += profileCard(item);
+          }
+        });
+      });
+      app.innerHTML = str;
+  }
 };
 
 getWorkPeple = function(data) {
-  return workID.innerHTML = `有 ${hasWorkCount + data.length} 位學員透過六角成功就業囉`;
+  return workID.innerHTML = `有 ${resume.hasWorkCount + data.length} 位學員透過六角成功就業囉`;
 };
 
 hopeArea = function(area) {
@@ -130,6 +213,8 @@ scrollTopClick = function(e) {
   });
 };
 
+getUrlQueryString();
+
 getProfile();
 
 window.addEventListener('scroll', function() {
@@ -141,10 +226,11 @@ window.addEventListener('scroll', function() {
 });
 
 areaID.addEventListener('change', function(e) {
+  resume.status = '1';
   if (e.target.value === '全部') {
-    return updateProfile(profileUserData);
+    return updateProfile(resume.profileUserData);
   } else {
-    return filterProfile(profileUserData, e.target.value);
+    return updateProfile(resume.profileUserData, e.target.value);
   }
 });
 

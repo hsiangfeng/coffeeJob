@@ -3,11 +3,16 @@ areaID = document.getElementById 'area'
 workID = document.getElementById 'work'
 scrollTopID = document.getElementById 'scroll-top'
 
-hasWorkCount = 300
-zone = ''
-job = ''
-profileUserData = ''
-workLen = ''
+resume = {
+  hasWorkCount: 300,
+  zone: '',
+  job: '',
+  # 1 = 地區
+  # 2 = 職業
+  # 3 = 兩者皆有
+  status: '0',
+  profileUserData: [],
+}
 
 getUrlQueryString = ->
   url = window.location.href
@@ -15,15 +20,20 @@ getUrlQueryString = ->
     queryArr1 = url.split('?')[1].split('&')
     queryArr1.forEach (item,index) ->
       if item.split('=')[0] == 'area'
-        zone = decodeURI item.split('=')[1]
+        resume.zone = decodeURI item.split('=')[1]
+        resume.status = '1'
         return
       else if item.split('=')[0] == 'job'
-        job = decodeURI item.split('=')[1]
+        resume.job = decodeURI item.split('=')[1]
+        resume.status = '2'
         return
+    if resume.zone && resume.job
+      resume.status = '3'
   return
 
 getProfile = ->
-  profileUrl = 'https://raw.githubusercontent.com/hexschool/Resume/master/profile.json'
+  # profileUrl = 'https://raw.githubusercontent.com/hexschool/Resume/master/profile.json'
+  profileUrl = './js/profile.json'
   workUrl = 'https://raw.githubusercontent.com/hexschool/Resume/master/findJob.json'
 
   getWorkAjax = ->
@@ -33,27 +43,33 @@ getProfile = ->
 
   $.when(getWorkAjax(), getProfileAJAX())
     .done (workResult1, profileResult2) ->
-      profileUserData = profileResult2[0]
+      resume.profileUserData = profileResult2[0]
       optionArea(profileResult2[0])
       getWorkPeple(workResult1[0])
 
-      if zone
-        filterProfile(profileResult2[0], zone)
-        return
-      else
-        updateProfile(profileResult2[0])
-        return
+      switch(resume.status)
+        when '1'
+          updateProfile(profileResult2[0], resume.zone)
+        when '2'
+          updateProfile(profileResult2[0], null, resume.job)
+        when '3'
+          updateProfile(profileResult2[0], resume.zone, resume.job)
+        else
+          updateProfile(profileResult2[0])
     .catch (error) ->
       console.log error.responseText
       return
   return
 
 optionArea = (data) ->
-  newArea = filterArea(data)
-  newArea.forEach (item) ->
-    options = document.createElement('option')
-    options.textContent = item
-    area.appendChild(options)
+  if resume.status == '0'
+    newArea = filterArea(data)
+    newArea.forEach (item) ->
+      options = document.createElement('option')
+      options.textContent = item
+      area.appendChild(options)
+  else
+    areaID.remove()
 
 filterArea = (data) ->
   profile = data
@@ -62,50 +78,94 @@ filterArea = (data) ->
 
   profile.forEach (item) ->
     cache = cache.concat(item.location)
-
   newArea = cache.filter (item, index) ->
     cache.indexOf(item) == index
 
   return newArea;
 
-updateProfile = (profileData) ->
-  profile = profileData
-  str = ''
-  newArea = filterArea(profile)
-  newArea.forEach (area) ->
-    str += hopeArea(area)
-    profile.forEach (item) ->
-      a = item.location.some (val) ->
-        return val == area
-      if a && item.profileUrl
-        return str += profileCard(item)
-    profile.forEach (item) ->
-      a = item.location.some (val) ->
-        val == area
-      if a && !item.profileUrl
-        str += profileCard(item)
-  app.innerHTML = str
+# updateProfile = (profileData) ->
+#   profile = profileData
+#   str = ''
+#   newArea = filterArea(profile)
+#   newArea.forEach (area) ->
+#     str += hopeArea(area)
+#     profile.forEach (item) ->
+#       a = item.location.some (val) ->
+#         return val == area
+#       if a && item.profileUrl
+#         return str += profileCard(item)
+#     profile.forEach (item) ->
+#       a = item.location.some (val) ->
+#         val == area
+#       if a && !item.profileUrl
+#         str += profileCard(item)
+#   app.innerHTML = str
 
-filterProfile = (profile, area) ->
+updateProfile = (profileData, area, job) ->
   str = ''
-  str += hopeArea(area)
-  
-  profile.forEach (profileItem) ->
-    profileItem.location.forEach (item) ->
-      if item == area && profileItem.profileUrl
-        str += profileCard(profileItem)
-  profile.forEach (profileItem) ->
-    profileItem.location.forEach (item) ->
-      if item == area && !profileItem.profileUrl
-        str += profileCard(profileItem)
-  app.innerHTML = str
+  console.log resume
+  profile = profileData
+  newArea = filterArea(profile)
+
+  switch (resume.status)
+    when '1'
+      str += hopeArea(area)
+
+      profile.forEach (profileItem) ->
+        profileItem.location.forEach (item) ->
+          if item == area && profileItem.profileUrl
+            str += profileCard(profileItem)
+      profile.forEach (profileItem) ->
+        profileItem.location.forEach (item) ->
+          if item == area && !profileItem.profileUrl
+            str += profileCard(profileItem)
+      app.innerHTML = str
+    when '2'
+      profile.forEach (profileItem) ->
+        profileItem.job.forEach (itemJob) ->
+          if itemJob == job && profileItem.profileUrl
+            return str += profileCard(profileItem)
+      profile.forEach (profileItem) ->
+        profileItem.job.forEach (itemJob) ->
+          if itemJob == job && !profileItem.profileUrl
+            return str += profileCard(profileItem)
+      app.innerHTML = str
+    when '3'
+      str += hopeArea(area)
+
+      profile.forEach (profileItem) ->
+        profileItem.location.forEach (itemArea) ->
+          profileItem.job.forEach (itemJob) ->
+            if itemArea == area && itemJob == job && profileItem.profileUrl
+              return str += profileCard(profileItem)
+      profileData.forEach (profileItem) ->
+        profileItem.location.forEach (itemArea) ->
+          profileItem.job.forEach (itemJob) ->
+            if itemArea == area && itemJob == job && !profileItem.profileUrl
+              return str += profileCard(profileItem)
+      app.innerHTML = str
+    else
+      newArea.forEach (area) ->
+        str += hopeArea(area)
+        profile.forEach (item) ->
+          a = item.location.some (val) ->
+            return val == area
+          if a && item.profileUrl
+            return str += profileCard(item)
+        profile.forEach (item) ->
+          a = item.location.some (val) ->
+            return val == area
+          if a && !item.profileUrl
+            return str += profileCard(item)
+      app.innerHTML = str
+  return
 
 
 getWorkPeple = (data) ->
-  workID.innerHTML = "有 #{hasWorkCount + data.length} 位學員透過六角成功就業囉"
+  return workID.innerHTML = "有 #{resume.hasWorkCount + data.length} 位學員透過六角成功就業囉"
 
 hopeArea = (area) ->
-  "<div class='col-md-12'>
+  return "<div class='col-md-12'>
     <h3>
       <i class='fas fa-map-marker-alt text-primary'></i>
       他們希望在 <span class='text-primary'>#{area}</span> 工作
@@ -166,7 +226,6 @@ scrollTopClick = (e) ->
 
 getUrlQueryString()
 getProfile()
-
 window.addEventListener 'scroll',() ->
   if window.scrollY > 100
     scrollTopID.style.opacity = '1'
@@ -174,9 +233,10 @@ window.addEventListener 'scroll',() ->
     scrollTopID.style.opacity = '0'
 
 areaID.addEventListener 'change', (e) ->
+  resume.status = '1'
   if e.target.value == '全部'
-    updateProfile(profileUserData)
+    updateProfile(resume.profileUserData)
   else
-    filterProfile(profileUserData, e.target.value)
+    updateProfile(resume.profileUserData, e.target.value)
 
 scrollTopID.addEventListener 'click', scrollTopClick
